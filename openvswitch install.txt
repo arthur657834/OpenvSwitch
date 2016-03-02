@@ -1,0 +1,18 @@
+yum -y groupinstall 'Development Tools'
+yum -y install build-essential fakeroot debhelper autoconf automake bzip2 libssl-dev openssl graphviz python-all procps python-qt4 python-zopeinterface python-twisted-conch libtool openssl-devel python-setuptools bridge-utils
+
+adduser ovswitch
+su - ovswitch
+wget http://openvswitch.org/releases/openvswitch-2.5.0.tar.gz
+tar xfz openvswitch-2.5.0.tar.gz
+mkdir -p ~/rpmbuild/SOURCES
+sed 's/openvswitch-kmod, //g' openvswitch-2.5.0/rhel/openvswitch.spec > openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec
+cp openvswitch-2.5.0.tar.gz rpmbuild/SOURCES/
+rpmbuild -bb --without check ~/openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec 
+
+su
+yum -y localinstall /home/ovswitch/rpmbuild/RPMS/x86_64/openvswitch-2.5.0-1.x86_64.rpm 
+
+
+systemctl start openvswitch.service
+systemctl -l status openvswitch.service

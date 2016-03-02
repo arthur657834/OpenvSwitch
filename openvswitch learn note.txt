@@ -1,0 +1,87 @@
+ovs-vswitchd 主要模块，实现switch的daemon，包括一个支持流交换的Linux内核模块；
+
+ovsdb-server 轻量级数据库服务器，提供ovs-vswitchd获取配置信息；
+
+ovs-brcompatd 让ovs-vswitch替换Linuxbridge，包括获取bridge ioctls的Linux内核模块；
+
+ovs-dpctl 用来配置switch内核模块；
+
+一些Scripts and specs 辅助OVS安装在Citrix XenServer上，作为默认switch；
+
+ovs-vsctl 查询和更新ovs-vswitchd的配置；
+
+ovs-appctl 发送命令消息，运行相关daemon；
+
+ovsdbmonitor GUI工具，可以远程获取OVS数据库和OpenFlow的流表。
+
+此外，OVS也提供了支持OpenFlow的特性实现，包括
+
+ovs-openflowd：一个简单的OpenFlow交换机；
+
+ovs-controller：一个简单的OpenFlow控制器；
+
+ovs-ofctl 查询和控制OpenFlow交换机和控制器；
+
+ovs-pki ：OpenFlow交换机创建和管理公钥框架；
+
+ovs-tcpundump：tcpdump的补丁，解析OpenFlow的消息；
+
+内核模块实现了多个“数据路径”（类似于网桥），每个都可以有多个“vports”（类似于桥内的端口）。每个数据路径也通过关联一下流表（flow table）来设置操作，而这些流表中的流都是用户空间在报文头和元数据的基础上映射的关键信息，一般的操作都是将数据包转发到另一个vport。当一个数据包到达一个vport，内核模块所做的处理是提取其流的关键信息并在流表中查找这些关键信息。当有一个匹配的流时它执行对应的操作。如果没有匹配，它会将数据包送到用户空间的处理队列中（作为处理的一部分，用户空间可能会设置一个流用于以后碰到相同类型的数据包可以在内核中执行操作）。
+
+常用命令:
+添加网桥：
+ovs-vsctl add-br br0
+							
+列出open vswitch中的所有网桥：
+ovs-vsctl list-br
+							
+判断网桥是否存在
+ovs-vsctl br-exists br0
+							
+将物理网卡挂接到网桥：
+ovs-vsctl add-port br0 eth0
+							
+列出网桥中的所有端口：
+ovs-vsctl list-ports br0
+							
+列出所有挂接到网卡的网桥：
+ovs-vsctl port-to-br eth0
+							
+查看open vswitch的网络状态：
+ovs-vsctl show
+							
+删除网桥上已经挂接的网口：
+vs-vsctl del-port br0 eth0
+							
+删除网桥：
+ovs-vsctl del-br br0
+
+查看open vswitch的端口信息
+ovs-ofctl show br0
+
+查看br0上各交换机端口的状态
+ovs-ofctl dump-ports br0
+
+查看br0上的所有流规则
+ovs-ofctl dump-flows br0
+
+以后看
+http://www.ibm.com/developerworks/cn/cloud/library/1401_zhaoyi_openswitch/index.html
+
+ovs-vsctl get Interface 4fcf2b4c1fdb4_l ofport
+ovs-dpctl show
+
+ovs-ofctl add-flow br0 "table=0, dl_src=01:00:00:00:00:00/01:00:00:00:00:00, actions=accept"
+ovs-ofctl add-flow ovsbr0 idle_timeout=0,in_port=2,actions=drop
+ovs-ofctl add-flow ovsbr0 dl_type=*,nw_src=ANY,action=drop
+ovs-ofctl del-flows ovsbr0 in_port=2
+
+
+每条流规则由一系列字段组成，分为基本字段、条件字段和动作字段三部分：
+基本字段包括生效时间duration_sec、所属表项table_id、优先级priority、处理的数据包数n_packets，空闲超时时间idle_timeout等，空闲超时时间idle_timeout以秒为单位，超过设置的空闲超时时间后该流规则将被自动删除，空闲超时时间设置为0表示该流规则永不过期，idle_timeout将不包含于ovs-ofctl dump-flows brname的输出中。
+条件字段包括输入端口号in_port、源目的mac地址dl_src/dl_dst、源目的ip地址nw_src/nw_dst、数据包类型dl_type、网络层协议类型nw_proto等，可以为这些字段的任意组合，但在网络分层结构中底层的字段未给出确定值时上层的字段不允许给确定值，即一条流规则中允许底层协议字段指定为确定值，高层协议字段指定为通配符(不指定即为匹配任何值)，而不允许高层协议字段指定为确定值，而底层协议字段却为通配符(不指定即为匹配任何值)，否则，ovs-vswitchd 中的流规则将全部丢失，网络无法连接。其中dl是datalink的缩写，nw是network的缩写，tp是transport的缩写。
+动作字段包括正常转发normal、定向到某交换机端口output：port、丢弃drop、更改源目的mac地址mod_dl_src/mod_dl_dst等，一条流规则可有多个动作，动作执行按指定的先后顺序依次完成。
+
+
+
+
