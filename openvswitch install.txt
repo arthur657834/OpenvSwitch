@@ -1,18 +1,18 @@
-yum -y groupinstall 'Development Tools'
-yum -y install build-essential fakeroot debhelper autoconf automake bzip2 libssl-dev openssl graphviz python-all procps python-qt4 python-zopeinterface python-twisted-conch libtool openssl-devel python-setuptools bridge-utils
-
-adduser ovswitch
-su - ovswitch
-wget http://openvswitch.org/releases/openvswitch-2.5.0.tar.gz
-tar xfz openvswitch-2.5.0.tar.gz
-mkdir -p ~/rpmbuild/SOURCES
-sed 's/openvswitch-kmod, //g' openvswitch-2.5.0/rhel/openvswitch.spec > openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec
-cp openvswitch-2.5.0.tar.gz rpmbuild/SOURCES/
-rpmbuild -bb --without check ~/openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec 
-
-su
-yum -y localinstall /home/ovswitch/rpmbuild/RPMS/x86_64/openvswitch-2.5.0-1.x86_64.rpm 
-
-
-systemctl start openvswitch.service
-systemctl -l status openvswitch.service
+U2FsdGVkX19hEaGCauENcHHf6qkH8xmK3/lcLtAgohT1rg09CNkYoYA8w0H5G4XE
+q/wo6m1IBcjK4BaXfMU0RW0MUDM+fSlaOy0P7B4y722bGEJZuzQ7KELwYB9DEOUN
+s/LjTwwFQ7//DoB7BUuBd9u2EMDBD3byeJ3a8wOisXvGhiUtfYL1tTG+fK3wJF+h
+BJCC8i/XbGLov6RFFKJmM7LwaH0hmjZnGQxtCELy4WxF3x03aB7Dy4pSgeffj5vn
+UcuizIOQ1JyDtcRDZafxnUJZ1Nc+wxGTJVEQ2GEXZDvE+ZpFsFdIA4S+Qka4Zrfk
+xBwltE/k28Y2oyzKVuBkaKpbFcpQ0gcMV03M9VZWGgC9oDHhhGVLZKFf1RlbiHZF
++ejw+sPQRNuLY+5XA9lw4UcOPBSv3TsknD54Siz1/PpEoraq0iYfvoSk82iGLZ2d
+Hkrvybn6mB8V3N8M6K3nL3eHhkSRGGSC3HpWyUR8vM62pClQLMdZGRTBi/a3nyWR
+nznxZRndDblhad4iTCwEj+jt9r2cgwmaz4lEYA5nF5AdbjLp9Qyof5JYM7Bx+i2u
+YCZrjPbi8C8MaLgYyblapsOqzbwEf9nrT9m+PvMiHJrJ0ULpjKeEI2aiR/MaqlTb
+XGnkSGyHh/YedypJQnqkdgkIomEOWu0YSGPpFVObGd0AWyLQfXnEkUS2fu88vkGM
+dkkf0ZtSyguKLJY9F5j2q7u53EjCWtqz+pARXsZizJD/z7caxUzlLHGyFf5wUg1j
+AZYbHMntN7vqoPvxiUhhn6NbRpGX/Uke+sYOEcY+rm4iS6Qdp9O3C9+u0nRMkeyU
+u/AEWYYxIZCOwf58D00sfDBxAPCgcUF8NfYuHhgioWkZ/Xd8rEQ6hxW0xK9bWsMn
+/3DAy9g9+s/J6A7LL+kaDjIRYEOOirTM91K08o9azWohT1QGwLOAcAvC29ZJYc0W
+0xkno1HPNX/are76Mzcg3tNJS3+qtne5UB0IqCQrzyAMGRaSojQE/RJDZ4foYmiI
+ekaNFJHl8h16yCJ7RvzjJYjp5o2rePNGfxdbfTOyC440WA3r0Iw8RgTGjtBwddMH
+OPDQZZwyZvvVKzzMslgy5Aq8o6J9gxggcgbJcH9ZfZ2kG2F5DH+c1A==
