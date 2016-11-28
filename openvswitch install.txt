@@ -1,18 +1,18 @@
-U2FsdGVkX1/4PV0N3ZJFoA8zf8ElUr1RT/DY+het9PhyamFUWzzRozPDXZOkgBjS
-vNCwfZoygJYRw2JsqPLCgrImpT5r5KU/7o4MhTuyUP0kCXODryr3kXOsnfRaojJG
-gNER4PFAspHP1GgOumcdmzDJYZpXKHRReVVnJPfFwBx69Um5He3ZWIJbNL50dcWD
-3KMXnbpJ580gURxOj75vsKKYvEuXvmPuoztujBzVxKB3suqMnSuj6hfkduEUVo92
-65abdSHQ+Nbf4yljlsKEhV5dZ090di49vSoc4dqMDDBgbgQWmZuxozXOTlTrl7rw
-xLFuB0HFMNawJIRD96q5e6zpdU6Eq1IlTJ38Ze+/K/JTJuGmeY6F3c8UobFyrQsW
-lLBGurZ2KUKURPdzoQfohskSpXgjhOfa0RISAT6dBcCJIZYoYdKvRO1ZhBPSaXBC
-cj2LWgfVbldYgrFEvXnzk24xPywk/cbzhMLdbWqyYY74zAkqbEWwT+gQkNPEzwxz
-YF2v6swWd5rn9IGtBSAizKHdQSWmFzZc3EGKqEdkk/Ldo+ZgDpY/X/UJ6Z/BR/UE
-cAOFX1ph3pj8U1soqiq44EwE+GoFl/QM2dLPEZ/wr18tVkpVU4od3UyZ59vaYPhD
-43e5dHvZZsc7oBMT4KRuRvmgjx5Yy843wqOdXxDRg+WEwlwSawb0TyDUYWYNzrfU
-X14kAQ8C4aeAE3ajGL17xCOLQ7777Wze6pClBy9Bn5NyHPySdpdL8bwGU5uDPzuX
-nv6/3/zPMFAF8u+atcSJwk632jfZ4bsO6Rzr9Ubs0yGjAARTDJvv8dZwH3nU7KY5
-uly6iqXp5Q7hJSO4mlRZO4c5Jv0cINDSlvelB3d6X8RvSUora4i5Zuk8VnF8XVuQ
-4MG3WNI5cvpzVgnLXCWk/hAEHiuVuIgbUS6C4hArtvpcvT7g+mDiAzGJAUV1Jl3+
-9gKy+6VNafksuXwpXrLUwFHVIPNXkvQT0FTVSkHgqdgcCR/O/mbex/O++Bj2v0Ag
-KxP5gcyesih+eqFHvza4qSivVd6v298bTYLY0Y4hfJeh06HdWNkFiSYr51u2vzEz
-JbMhJ9vl/aO76K6nMq/0Jt1H5dxEKHtBkAcQ0CoHSmV4v5JgYb6FEw==
+yum -y groupinstall 'Development Tools'
+yum -y install build-essential fakeroot debhelper autoconf automake bzip2 libssl-dev openssl graphviz python-all procps python-qt4 python-zopeinterface python-twisted-conch libtool openssl-devel python-setuptools bridge-utils
+
+adduser ovswitch
+su - ovswitch
+wget http://openvswitch.org/releases/openvswitch-2.5.0.tar.gz
+tar xfz openvswitch-2.5.0.tar.gz
+mkdir -p ~/rpmbuild/SOURCES
+sed 's/openvswitch-kmod, //g' openvswitch-2.5.0/rhel/openvswitch.spec > openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec
+cp openvswitch-2.5.0.tar.gz rpmbuild/SOURCES/
+rpmbuild -bb --without check ~/openvswitch-2.5.0/rhel/openvswitch_no_kmod.spec 
+
+su
+yum -y localinstall /home/ovswitch/rpmbuild/RPMS/x86_64/openvswitch-2.5.0-1.x86_64.rpm 
+
+
+systemctl start openvswitch.service
+systemctl -l status openvswitch.service
